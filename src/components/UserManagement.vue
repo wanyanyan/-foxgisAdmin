@@ -182,7 +182,7 @@
       </tbody>
     </table>
   </div>
-
+</div>
 <foxgis-dialog id="delete-dialog" class='modal' :dialog="dialogcontent" @dialog-action="deleteAction"></foxgis-dialog>
 </template>
 
@@ -217,6 +217,8 @@ export default {
     },
 
     okClick:function(id){
+      let emailReg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+      let mobileReg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
       if(id === 'user-info'){//编辑用户信息
         let is_verified1  = this.userInfo.is_verified = document.getElementById('is_verified-input').value;
         let verified1 = false;
@@ -226,11 +228,33 @@ export default {
           verified1 = false; 
         }
         let name1 = this.userInfo.name = document.getElementById('name-input').value;
+        if(name1 === ''){
+          this.$broadcast("mailSent",{message:"姓名不能为空！",timeout:3000});
+          return ;
+        }
         let role1 = this.userInfo.role = document.getElementById('role-input').value;
         let email1 = this.userInfo.email = document.getElementById('email-input').value;
+        if(email1 === ''){
+          this.$broadcast("mailSent",{message:"邮箱不能为空！",timeout:3000});
+          return ;
+        }else if(!emailReg.test(email1)){
+          this.$broadcast("mailSent",{message:"请输入正确的邮箱地址！",timeout:3000});
+          return ;
+        }
         let telephone1 = this.userInfo.telephone = document.getElementById('telephone-input').value;
         let mobile1 = this.userInfo.mobile = document.getElementById('mobile-input').value;
+        if(mobile1 === ''){
+          this.$broadcast("mailSent",{message:"手机号码不能为空！",timeout:3000});
+          return ;
+        }else if(!mobileReg.test(mobile1)){
+          this.$broadcast("mailSent",{message:"请输入正确的电话格式！",timeout:3000});
+          return ;
+        }
         let location1 = this.userInfo.location = document.getElementById('location-input').value;
+        if(location1 === ''){
+          this.$broadcast("mailSent",{message:"位置不能为空！",timeout:3000});
+          return ;
+        }
         let organization1 = this.userInfo.organization = document.getElementById('organization-input').value;
         let position1 = this.userInfo.position = document.getElementById('position-input').value;
 
@@ -283,10 +307,28 @@ export default {
           verified = false; 
         }
         let name = document.getElementById('name').value;
+        if(name === ''){
+          this.$broadcast("mailSent",{message:"姓名不能为空！",timeout:3000});
+          return ;
+        }
         let role = document.getElementById('role').value;
         let email = document.getElementById('email').value;
+        if(email === ''){
+          this.$broadcast("mailSent",{message:"邮箱不能为空！",timeout:3000});
+          return ;
+        }else if(!emailReg.test(email)){
+          this.$broadcast("mailSent",{message:"请输入正确的邮箱地址！",timeout:3000});
+          return ;
+        }
         let telephone = document.getElementById('telephone').value;
         let mobile = document.getElementById('mobile').value;
+        if(mobile === ''){
+          this.$broadcast("mailSent",{message:"手机号码不能为空！",timeout:3000});
+          return ;
+        }else if(!mobileReg.test(mobile)){
+          this.$broadcast("mailSent",{message:"请输入正确的电话格式！",timeout:3000});
+          return ;
+        }
         let location = document.getElementById('location').value;
         if(location === ''){
           this.$broadcast("mailSent",{message:"位置不能为空！",timeout:3000});
@@ -389,6 +431,8 @@ export default {
       dialogcontent: {
         title: '',//对话框标题
         tips:'',//对话框中的提示性文字
+        textCancel:'取消',
+        textOk:'确定'
       },
       provinces: [
         '北京市',
