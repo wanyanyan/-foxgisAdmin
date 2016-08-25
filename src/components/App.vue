@@ -11,8 +11,8 @@ export default {
 
   attached() {
     //刷新cookie
-    // let username = docCookie.getItem('username')
-    // let access_token = docCookie.getItem('access_token')
+    // let username = docCookie.getItem('super-username')
+    // let access_token = docCookie.getItem('super-access_token')
     // if(username !== null && access_token !== null){
     //   this.$http({url:'http://bygis.com/api/v1/users/'+username,method:'POST',headers:{'x-access-token':access_token}})
     //   .then(function(response){
@@ -21,8 +21,8 @@ export default {
     //     let date = new Date()
     //     let days = 7
     //     date.setTime(date.getTime() + days*24*3600*1000)
-    //     docCookie.setItem('access_token',access_token,date)
-    //     docCookie.setItem('username',username,date)
+    //     docCookie.setItem('super-access_token',access_token,date)
+    //     docCookie.setItem('super-username',username,date)
     //   })
     // }
   }

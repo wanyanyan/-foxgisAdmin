@@ -5,7 +5,7 @@
     <div class="mdl-layout__drawer">
       <nav class="mdl-navigation">
         <a class="mdl-navigation__link" v-link="{ path: '/management/userManagement' }"><i class="material-icons">account_circle</i>用户管理<span  v-mdl-badge.number="user_nums" ></span></a>
-        <a class="mdl-navigation__link" v-link="{ path: '/management/atlasDownload' }"><i class="material-icons">account_circle</i>图集下载</a>
+        <a class="mdl-navigation__link" v-link="{ path: '/management/atlasDownload' }"><i class="material-icons">file_download</i>图集管理</a>
       </nav>
       <div class="mdl-layout-spacer"></div>
       <nav class="mdl-navigation">
