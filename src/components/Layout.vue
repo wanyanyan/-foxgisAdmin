@@ -2,17 +2,13 @@
 <div class="foxgis-layout">
   <div class="mdl-layout mdl-js-layout">
     <header class="mdl-layout__header mdl-layout__header--seamed">
-      <!-- <img class="mdl-layout-icon" src="../assets/logo.png"></img> -->
       <div class="mdl-layout__header-row">
-        <!-- <span class="mdl-layout-title">辅助决策用图系统</span> -->
         <div class="mdl-layout-spacer"></div>
+        <h5>管理员</h5>
         <nav class="mdl-navigation">
           <a class="mdl-navigation__link" v-link="{ path: '/loginManagement' }" v-if="username==undefined">登录</a>
+          <a class="mdl-navigation__link" v-else>{{username}}</a>
         </nav>
-      </div>
-      <div class="userCenter">
-        <a v-link="{ path: '/studio/user' }">用户管理</a>
-        <a v-on:click.prevent="signout">注销</a>
       </div>
     </header>
     <div class="mdl-layout--content">
