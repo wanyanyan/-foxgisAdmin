@@ -6,7 +6,7 @@
       <div class="mdl-layout__header-row">
         <!-- <span class="mdl-layout-title">辅助决策用图系统</span> -->
         <div class="mdl-layout-spacer"></div>
-        <nav class="mdl-navigation" id="navigation-panel">
+        <nav class="mdl-navigation">
           <a class="mdl-navigation__link" v-link="{ path: '/loginManagement' }" v-if="username==undefined">登录</a>
         </nav>
       </div>

@@ -359,7 +359,6 @@ export default {
     },
   },
   attached() {
-    document.getElementById("navigation-panel").style.display = "none";
     let username = Cookies.get('super-username')
     if(username === undefined){
       return 
