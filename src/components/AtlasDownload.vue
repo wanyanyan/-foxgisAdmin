@@ -21,7 +21,7 @@
       <span>上传单位</span>
       <select>
         <option value="">选择上传单位</option>
-        <option value="{{user.organization}}" v-for="user in userData">{{user.organization}}</option>
+        <option value="{{user.username}},{{user.organization}}" v-for="user in userData">{{user.organization}}</option>
       </select><span style="font-size:12px;">且</span>
     </div>
     <div class="upload-year">
@@ -48,9 +48,9 @@ import Cookies from 'js-cookie'
 export default {
   methods: {
     downloadAtlas:function(){
-      let username = Cookies.get('super-username')
-      let access_token = Cookies.get('super-access_token')
-      let url = SERVER_API.uploads+"?";
+      let username = Cookies.get('super-username');
+      let access_token = Cookies.get('super-access_token');
+      let url = SERVER_API.uploads+"/"+username+"/"+"download?";
       var mapLocation = $(".map-location select").val();
       var mapYear = $(".map-year select").val();
       var organization =  $(".user-orga select").val();
@@ -61,10 +61,10 @@ export default {
       }
       if(mapLocation){url = url+"&location="+mapLocation;}
       if(mapYear){url = url+"&year="+mapYear;}
-      if(organization){url = url+"&organization="+organization;}
+      if(organization){url = url+"&user="+organization;}
       if(upload){url = url+"&createdAt="+upload;}
       url = url.replace("&","");
-      $("#url-text").text(url);
+      url = url + "&access_token=" + access_token;
       if((/Trident\/7\./).test(navigator.userAgent)||(/Trident\/6\./).test(navigator.userAgent)){
       //IE10/IE11
         var aLink = document.createElement('a')
