@@ -1,189 +1,193 @@
 <template>
-<mdl-snackbar display-on="mailSent"></mdl-snackbar>
-<mdl-button raised colored v-mdl-ripple-effect style="float: right;margin-right: 20px;margin-top: 15px;" @click="showAddBox" id="add-button">添加用户</mdl-button>
-<div class="wrapper">
-  <table>
-    <tr>
-      <th>用户名</th>
-      <th>姓名</th>
-      <th>角色</th>
-      <th>是否验证</th>
-      <th>邮箱</th>
-      <th>固定电话</th>
-      <th>手机号码</th>
-      <th>位置</th>
-      <th>单位</th>
-      <th>职务/职称</th>
-      <th>注册时间</th>
-      <th>操作</th>
-    </tr>
-    <tr v-for="u in userData">
-      <td>{{u.username}}</td>
-      <td>{{u.name}}</td>
-      <td>{{u.role}}</td>
-      <td>{{u.is_verified}}</td>
-      <td>{{u.email}}</td>
-      <td>{{u.telephone}}</td>
-      <td>{{u.mobile}}</td>
-      <td>{{u.location}}</td>
-      <td>{{u.organization}}</td>
-      <td>{{u.position}}</td>
-      <td>{{u.createdAt}}</td>
-      <td style= "cursor:pointer;width: 30px;">
-        <a v-on:click='showEditBox(u.username)'>编辑</a>
-        <a v-on:click='showDelBox(u.username)'>删除</a>
-      </td>
-    </tr>
-  </table>
-</div>
-<div id="backgroundPanel">
-  <div id="user-info">
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id ="user-info-table">
-      <tbody>
+  <div class="user">
+    <mdl-snackbar display-on="mailSent"></mdl-snackbar>
+    <h5><i class="material-icons">account_circle</i><span>用户管理</span></h5>
+    <mdl-button raised colored v-mdl-ripple-effect style="float: right;margin-top: 15px;" @click="showAddBox" id="add-button">添加用户</mdl-button>
+    <div class="wrapper">
+      <table>
         <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>用户名：</b></td>
-          <td v-if="userInfo.username"><input disabled id="username-input" v-model="userInfo.username"></td>
-          <td v-else><input disabled id="username-input" value=""></td>
+          <th style="width:9%;">用户名</th>
+          <th style="width:5.5%;">姓名</th>
+          <th style="width:5%;">角色</th>
+          <th style="width:6%;">是否验证</th>
+          <th style="width:10%;">邮箱</th>
+          <th style="width:12%;">固定电话</th>
+          <th style="width:10%;">手机号码</th>
+          <th style="width:5%;">位置</th>
+          <th style="width:11%;">单位</th>
+          <th style="width:10%;">职务/职称</th>
+          <th style="width:10%;">注册时间</th>
+          <th style="width:6.5%;">操作</th>
         </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>是否验证：</b></td>
-          <td>
-            <select id="is_verified-input" v-model="userInfo.is_verified">>
-              <option value='已验证'>已验证</option>
-              <option value='未验证'>未验证</option>
-            </select>
+        <tr v-for="u in userData">
+          <td title="{{u.username}}">{{u.username}}</td>
+          <td title="{{u.name}}">{{u.name}}</td>
+          <td title="{{u.role}}">{{u.role}}</td>
+          <td title="{{u.is_verified}}">{{u.is_verified}}</td>
+          <td title="{{u.email}}">{{u.email}}</td>
+          <td title="{{u.telephone}}">{{u.telephone}}</td>
+          <td title="{{u.mobile}}">{{u.mobile}}</td>
+          <td title="{{u.location}}">{{u.location}}</td>
+          <td title="{{u.organization}}">{{u.organization}}</td>
+          <td title="{{u.position}}">{{u.position}}</td>
+          <td title="{{u.createdAt}}">{{u.createdAt}}</td>
+          <td style= "cursor:pointer;width: 30px;">
+            <a v-on:click='showEditBox(u.username)'>编辑</a>
+            <a v-on:click='showDelBox(u.username)'>删除</a>
           </td>
         </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>姓名：</b></td>
-          <td v-if="userInfo.name"><input id="name-input" v-model="userInfo.name"></td>
-          <td v-else><input id="name-input" value=""></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>角色：</b></td>
-          <td>
-            <select id="role-input" v-model="userInfo.role">
-              <option value="admin">admin</option>
-              <option value="user">user</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>邮箱：</b></td>
-          <td v-if="userInfo.email"><input id="email-input" v-model="userInfo.email"></td>
-          <td v-else><input id="email-input" value=""></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>固定电话：</b></td>
-          <td v-if="userInfo.telephone"><input id="telephone-input" v-model="userInfo.telephone"></td>
-          <td v-else><input id="telephone-input" value=""></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>手机号码：</b></td>
-          <td v-if="userInfo.mobile"><input id="mobile-input" v-model="userInfo.mobile"></td>
-          <td v-else><input id="mobile-input" value=""></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>位置：</b></td>
-          <td>
-            <select id="location-input" v-model="userInfo.location">
-              <option v-for="province in provinces" value="{{province}}">{{province}}</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>单位：</b></td>
-          <td v-if="userInfo.organization"><input id="organization-input" v-model="userInfo.organization"></td>
-          <td v-else><input id="organization-input" value=""></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>职务/职称：</b></td>
-          <td v-if="userInfo.position"><input id="position-input" v-model="userInfo.position"></td>
-          <td v-else><input id="position-input" value=""></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>注册时间：</b></td>
-          <td v-if="userInfo.createdAt"><input disabled id="createdAt-input" v-model="userInfo.createdAt"></td>
-          <td v-else><input disabled id="createdAt-input" value=""></td>
-        </tr>
-        <tr>
-          <td><mdl-button v-mdl-ripple-effect accent @click="okClick('user-info')">确定</mdl-button></td>
-          <td><mdl-button v-mdl-ripple-effect accent @click="cancelClick('user-info')">取消</mdl-button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      </table>
+    </div>
+    <div id="backgroundPanel">
+      <div id="user-info">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id ="user-info-table">
+          <tbody>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>用户名：</b></td>
+              <td v-if="userInfo.username"><input disabled id="username-input" v-model="userInfo.username"></td>
+              <td v-else><input disabled id="username-input" value=""></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>是否验证：</b></td>
+              <td>
+                <select id="is_verified-input" v-model="userInfo.is_verified">>
+                  <option value='已验证'>已验证</option>
+                  <option value='未验证'>未验证</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>姓名：</b></td>
+              <td v-if="userInfo.name"><input id="name-input" v-model="userInfo.name"></td>
+              <td v-else><input id="name-input" value=""></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>角色：</b></td>
+              <td>
+                <select id="role-input" v-model="userInfo.role">
+                  <option value="admin">admin</option>
+                  <option value="user">user</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>邮箱：</b></td>
+              <td v-if="userInfo.email"><input id="email-input" v-model="userInfo.email"></td>
+              <td v-else><input id="email-input" value=""></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>固定电话：</b></td>
+              <td v-if="userInfo.telephone"><input id="telephone-input" v-model="userInfo.telephone"></td>
+              <td v-else><input id="telephone-input" value=""></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>手机号码：</b></td>
+              <td v-if="userInfo.mobile"><input id="mobile-input" v-model="userInfo.mobile"></td>
+              <td v-else><input id="mobile-input" value=""></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>位置：</b></td>
+              <td>
+                <select id="location-input" v-model="userInfo.location">
+                  <option v-for="province in provinces" value="{{province}}">{{province}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>单位：</b></td>
+              <td v-if="userInfo.organization"><input id="organization-input" v-model="userInfo.organization"></td>
+              <td v-else><input id="organization-input" value=""></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>职务/职称：</b></td>
+              <td v-if="userInfo.position"><input id="position-input" v-model="userInfo.position"></td>
+              <td v-else><input id="position-input" value=""></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>注册时间：</b></td>
+              <td v-if="userInfo.createdAt"><input disabled id="createdAt-input" v-model="userInfo.createdAt"></td>
+              <td v-else><input disabled id="createdAt-input" value=""></td>
+            </tr>
+            <tr>
+              <td><mdl-button v-mdl-ripple-effect accent @click="okClick('user-info')">确定</mdl-button></td>
+              <td><mdl-button v-mdl-ripple-effect accent @click="cancelClick('user-info')">取消</mdl-button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
-  <div id="add-info">
-    <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id ="add-info-table">
-      <tbody>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>用户名：</b></td>
-          <td><input id="username"></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>密码：</b></td>
-          <td><input type="password" id="password" pattern="(\w|[$,@]){6,}"></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>是否验证：</b></td>
-          <td>
-            <select id="is_verified">
-              <option value="已验证">已验证</option>
-              <option value="未验证">未验证</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>姓名：</b></td>
-          <td><input id="name"></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>角色：</b></td>
-          <td>
-            <select id="role">
-              <option value="admin">admin</option>
-              <option value="user">user</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>邮箱：</b></td>
-          <td><input id="email"></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>固定电话：</b></td>
-          <td><input id="telephone"></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>手机号码：</b></td>
-          <td><input id="mobile" pattern="^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$"></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>位置：</b></td>
-          <td>
-            <select id="location">
-              <option v-for="province in provinces" value="{{province}}">{{province}}</option>
-            </select>
-          </td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>单位：</b></td>
-          <td v><input id="organization"></td>
-        </tr>
-        <tr>
-          <td class="mdl-data-table__cell--non-numeric"><b>职务/职称：</b></td>
-          <td><input id="position"></td>
-        </tr>
-        <tr>
-          <td><mdl-button v-mdl-ripple-effect accent @click="okClick('add-info')">确定</mdl-button></td>
-          <td><mdl-button v-mdl-ripple-effect accent @click="cancelClick('add-info')">取消</mdl-button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+      <div id="add-info">
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp" id ="add-info-table">
+          <tbody>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>用户名：</b></td>
+              <td><input id="username"></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>密码：</b></td>
+              <td><input type="password" id="password" pattern="(\w|[$,@]){6,}"></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>是否验证：</b></td>
+              <td>
+                <select id="is_verified">
+                  <option value="已验证">已验证</option>
+                  <option value="未验证">未验证</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>姓名：</b></td>
+              <td><input id="name"></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>角色：</b></td>
+              <td>
+                <select id="role">
+                  <option value="admin">admin</option>
+                  <option value="user">user</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>邮箱：</b></td>
+              <td><input id="email"></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>固定电话：</b></td>
+              <td><input id="telephone"></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>手机号码：</b></td>
+              <td><input id="mobile" pattern="^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$"></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>位置：</b></td>
+              <td>
+                <select id="location">
+                  <option v-for="province in provinces" value="{{province}}">{{province}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>单位：</b></td>
+              <td v><input id="organization"></td>
+            </tr>
+            <tr>
+              <td class="mdl-data-table__cell--non-numeric"><b>职务/职称：</b></td>
+              <td><input id="position"></td>
+            </tr>
+            <tr>
+              <td><mdl-button v-mdl-ripple-effect accent @click="okClick('add-info')">确定</mdl-button></td>
+              <td><mdl-button v-mdl-ripple-effect accent @click="cancelClick('add-info')">取消</mdl-button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-<foxgis-dialog id="delete-dialog" class='modal' :dialog="dialogcontent" @dialog-action="deleteAction"></foxgis-dialog>
+    <foxgis-dialog id="delete-dialog" class='modal' :dialog="dialogcontent" @dialog-action="deleteAction"></foxgis-dialog>
+  </div>
 </template>
 
 
@@ -206,7 +210,9 @@ export default {
     },
 
     showDelBox:function(username){
-      this.dialogcontent.title = "确定删除 "+username+" 用户吗？";
+      this.dialogcontent.title = '确定删除用户 "'+username+'" 吗？';
+      this.dialogcontent.textOk = "删除";
+      this.dialogcontent.textCancel = "取消";
       document.getElementById('delete-dialog').style.display = 'block';
       this.deleteUsername = username;
     },
@@ -388,6 +394,8 @@ export default {
       deleteUsername:'',
       dialogcontent: {
         title: '',//对话框标题
+        textOk:'',
+        textCancel:'',
         tips:'',//对话框中的提示性文字
       },
       provinces: [
@@ -433,34 +441,58 @@ export default {
 
 
 <style scoped>
+.user {
+  height: 100%;
+  width: 95%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.material-icons {
+  padding: 10px;
+  margin-right: 5px;
+  vertical-align: middle;
+  border-radius: 50%;
+  color: #FB8C00;
+  background-color: #FFF;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+}
 .wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top:70px; 
+  margin-bottom: 100px;
+  overflow: hidden;
 }
 .wrapper table {
+  width: 100%;
   font-family: verdana,arial,sans-serif;
   font-size:11px;
   color:#333333;
   border-width: 1px;
   border-color: #666666;
   border-collapse: collapse;
+  table-layout: fixed;
 }
 .wrapper table th {
-  border-width: 1px;
-  padding: 8px;
-  border-style: solid;
-  border-color: #666666;
+  border: 1px solid #666666;
+  padding: 5px 1px 5px 1px;
   background-color: #dedede;
 }
 .wrapper table td {
-  border-width: 1px;
-  padding: 8px;
-  border-style: solid;
-  border-color: #666666;
+  border: 1px solid #666666;
+  padding: 5px 2px 5px 2px;
   background-color: #ffffff;
+  word-break:keep-all;/* 不换行 */
+  white-space:nowrap;/* 不换行 */
+  overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+  text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
 }
+.wrapper table tr:hover{
+  background-color: #c3c3c3;
+}
+
 #user-info{
   max-width: 1000px;
   margin: 200px auto 0 300px;
@@ -499,11 +531,16 @@ input:hover{
   text-align:right;
   background-color:transparent;
 }
-.modal {
+
+#delete-dialog{
+  display: none;
+}
+
+#backgroundPanel {
   position: fixed;
   left: 240px;
   right: 0px;
-  top:0px;
+  top: 0px;
   bottom: 0px;
   margin: 0 auto;
   padding-bottom: 20px;
@@ -511,18 +548,5 @@ input:hover{
   display: none;
   z-index: 9999;
   overflow: auto;
-}
-#backgroundPanel {
-    position: fixed;
-    left: 0px;
-    right: 0px;
-    top: 0px;
-    bottom: 0px;
-    margin: 0 auto;
-    padding-bottom: 20px;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 9999;
-    overflow: auto;
 }
 </style>
