@@ -221,6 +221,7 @@ export default {
     okClick:function(id){
       let emailReg = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
       let mobileReg = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/;
+      let usernameReg =  /^[0-9a-zA-Z]*$/g;
       if(id === 'user-info'){//编辑用户信息
         let is_verified1  = this.userInfo.is_verified = document.getElementById('is_verified-input').value;
         let verified1 = false;
@@ -294,6 +295,9 @@ export default {
           return ;
         }else if(username.length>20){
           this.$broadcast("mailSent",{message:"用户名过长！",timeout:3000});
+          return ;
+        }else if(!usernameReg.test(username)){
+          this.$broadcast("mailSent",{message:"用户名只能为字母，数字或字母数字组合！",timeout:3000});
           return ;
         }
         let password = document.getElementById('password').value;
