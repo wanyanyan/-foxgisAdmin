@@ -144,8 +144,8 @@
               <td class="mdl-data-table__cell--non-numeric"><b>角色：</b></td>
               <td>
                 <select id="role">
-                  <option value="admin">admin</option>
-                  <option value="user">user</option>
+                  <option value="admin">管理员</option>
+                  <option value="user">普通用户</option>
                 </select>
               </td>
             </tr>
