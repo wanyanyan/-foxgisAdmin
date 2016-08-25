@@ -8,21 +8,21 @@
       <select>
         <option value="">选择制图区域</option>
         <option value="{{location.location}}" v-for="location in locations">{{location.location}}</option>
-      </select>
+      </select><span style="font-size:12px;">且</span>
     </div>
     <div class="map-year">
       <span>制图时间</span>
       <select>
         <option value="">选择制图时间</option>
         <option value="{{year.year}}" v-for="year in years">{{year.year}}</option>
-      </select>
+      </select><span style="font-size:12px;">且</span>
     </div>
     <div class="user-orga">
       <span>上传单位</span>
       <select>
         <option value="">选择上传单位</option>
         <option value="{{user.organization}}" v-for="user in userData">{{user.organization}}</option>
-      </select>
+      </select><span style="font-size:12px;">且</span>
     </div>
     <div class="upload-year">
       <span>上传时间</span>
