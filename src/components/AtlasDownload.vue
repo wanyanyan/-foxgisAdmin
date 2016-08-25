@@ -17,11 +17,11 @@ export default {
   },
 
   attached() {
-    let username = Cookies.get('username');
+    let username = Cookies.get('super-username');
     if(username === undefined){
       return
     }
-    let access_token = Cookies.get('access_token')
+    let access_token = Cookies.get('super-access_token')
     //this.username = username
     let url = SERVER_API.tilesets + '/' + username
     var that = this
