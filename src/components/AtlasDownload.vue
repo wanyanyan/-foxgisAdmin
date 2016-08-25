@@ -1,26 +1,8 @@
 <template>
 <div class="data">
   <mdl-snackbar display-on="mailSent"></mdl-snackbar>
-  <h5><i class="material-icons">layers</i><span>数据</span></h5>
-
-  <div class="search">
-    <foxgis-search :placeholder="'搜索'" :value="searchKeyWords" :search-key-words.sync="searchKeyWords"></foxgis-search>
-    <!-- <mdl-button raised colored v-mdl-ripple-effect id="upload-button" @click="uploadFileClick">上传数据</mdl-button>
-    <input type="file" multiple style="display:none" id="file" accept=".json,.mbtiles,.zip,*.*"> -->
-    <div id="picker" >上传数据</div>
-  </div>
-
-  <div class='progress-bar' style="display:none">
-    <div class="activebar bar" :style="uploadStatus.percentage"></div>
-    <div class="bufferbar bar"></div>
-    <span id='uplate-status'>
-      <span style = 'font-size:12px;color:#6F6F49;'>文件大小：{{uploadStatus.total_size}}</span>
-      <span style = 'font-size:12px;color:blue;'> - ({{uploadStatus.current_file}}/{{uploadStatus.total_files}}) - {{uploadStatus.progress}}%</span>
-    </span>
-  </div>
-
-  <foxgis-data-cards-data :dataset="displayDataset"></foxgis-data-cards-data>
-  
+  <h5><i class="material-icons">layers</i><span>图集下载</span></h5>
+   
 </div>
 </template>
 
