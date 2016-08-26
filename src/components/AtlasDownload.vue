@@ -4,39 +4,35 @@
   <h5><i class="material-icons">layers</i><span>图集下载</span></h5>
   <div id="atlas-download">
     <div class="map-location">
-      <span>制图区域</span>
+      <span>制图区域</span><br/>
       <select>
         <option value="">选择制图区域</option>
         <option value="{{location.location}}" v-for="location in locations">{{location.location}}</option>
-      </select><span style="font-size:12px;">且</span>
+      </select><span style="font-size:12px;color:red;">(且)</span>
     </div>
     <div class="map-year">
-      <span>制图时间</span>
+      <span>制图时间</span><br/>
       <select>
         <option value="">选择制图时间</option>
         <option value="{{year.year}}" v-for="year in years">{{year.year}}</option>
-      </select><span style="font-size:12px;">且</span>
+      </select><span style="font-size:12px;color:red;">(且)</span>
     </div>
     <div class="user-orga">
-      <span>上传单位</span>
+      <span>上传单位</span><br/>
       <select>
         <option value="">选择上传单位</option>
         <option value="{{user.username}},{{user.organization}}" v-for="user in userData">{{user.organization}}</option>
-      </select><span style="font-size:12px;">且</span>
+      </select><span style="font-size:12px;color:red;">(且)</span>
     </div>
     <div class="upload-year">
-      <span>上传时间</span>
+      <span>上传时间</span><br/>
       <select>
         <option value="">选择上传时间</option>
         <option value="{{year}}" v-for="year in uploadYears">{{year}}</option>
       </select>
     </div>
-    
-    <mdl-anchor-button accent raised v-mdl-ripple-effect style="min-width: 88px;" @click="downloadAtlas" id="btn-download">下载</mdl-anchor-button>
-
-    <div>
-      <span id="url-text" style="color:red"></span>
-    </div>
+    <mdl-anchor-button accent raised v-mdl-ripple-effect style="width:6%;min-width:20px;" @click="downloadAtlas" id="btn-download">下载</mdl-anchor-button>
+    <span id="url-text" style="color:red;position:relative;top:10px;"></span>
   </div>
 
   <h5><i class="material-icons">layers</i><span>图集清理</span></h5>
@@ -238,6 +234,9 @@ h5 {
 #atlas-download div{
   margin-top: 5px;
   margin-bottom: 10px;
+  width: 22%;
+  text-align: center;
+  float: left;
 }
 
 #atlas-download select{
@@ -273,5 +272,12 @@ h5 {
   white-space:nowrap;/* 不换行 */
   overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
   text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+
+#btn-download{
+  position: relative;
+  width: 6%;
+  min-width: 20px;
+  top: 10px;
 }
 </style>
