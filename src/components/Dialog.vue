@@ -2,7 +2,10 @@
   <div>
     <div class="modal">
       <div class="dialog">
-        <div class="content">{{dialog.title}}</div>
+        <div class="content">
+          <i class="material-icons" style="font-size:70px;color:#ff3232;vertical-align: middle;float:left;">warning</i>
+          <span style="position: relative;top: 12px;">{{dialog.title}}</span>
+        </div>
         <div class="action">
           <mdl-button raised colored v-mdl-ripple-effect v-on:click="doCancel">{{dialog.textCancel}}</mdl-button>
           <mdl-button accent raised v-mdl-ripple-effect v-on:click="doDelete">{{dialog.textOk}}</mdl-button>

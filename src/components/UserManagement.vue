@@ -208,7 +208,7 @@ export default {
     },
 
     showDelBox:function(username){
-      this.dialogcontent.title = '确定删除用户 "'+username+'" 吗？';
+      this.dialogcontent.title = '该操作将会从数据库彻底删除！确定删除用户 "'+username+'" 吗？';
       document.getElementById('delete-dialog').style.display = 'block';
       this.deleteUsername = username;
     },
