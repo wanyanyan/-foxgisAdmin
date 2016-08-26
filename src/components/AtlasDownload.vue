@@ -41,7 +41,16 @@
 
   <h5><i class="material-icons">layers</i><span>图集清理</span></h5>
   <div id="atlas-delete">
-    <mdl-anchor-button accent raised v-mdl-ripple-effect style="min-width: 88px;" @click="downloadAtlas" id="btn-delete">删除</mdl-anchor-button>
+    <mdl-anchor-button accent raised v-mdl-ripple-effect style="min-width: 88px;" @click="deleteAtlas" id="btn-delete">删除</mdl-anchor-button>
+    <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 200px;position: absolute;" @click="selectAll" id="select-all">全选</mdl-anchor-button>
+    <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 100px;position: absolute;" @click="inverseSelect">反选</mdl-anchor-button>
+    <div style="width: 200px;margin-left: 300px;" class="delete_owner">
+      <span>上传者</span>
+      <select id="delete_owner" @change="selectOwner">
+        <option value="">选择上传者</option>
+        <option value="{{u}}" v-for="u in owners">{{u}}</option>
+      </select><span style="font-size:12px;"></span>
+    </div>
     <div id="atlas-items">
       <table>
         <tr>
@@ -55,7 +64,7 @@
           <th style="width:7%;">图幅大小</th>
           <th style="width:3%;text-align:center;">选择</th>
         </tr>
-        <tr v-for="u in uploads">
+        <tr v-for="u in displayUploads">
           <td title="{{u.name}}">{{u.name}}</td>
           <td title="{{u.owner}}">{{u.owner}}</td>
           <td title="{{u.createdAt}}">{{u.createdAt}}</td>
@@ -65,18 +74,22 @@
           <td title="{{u.format}}">{{u.format}}</td>
           <td title="{{u.dimensions}}">{{u.dimensions}}</td>
           <td style= "cursor:pointer;width: 30px;">
-            <input type="checkbox" name="select-map" style="width:15px;height:15px;">
+            <input type="checkbox" name="select-map" value="{{u.upload_id}}" @click="selectOne(u.upload_id)" style="width:15px;height:15px;">
+            <!--<input type="checkbox" class="card-checkbox" style>-->
           </td>
         </tr>
       </table>
     </div>
   </div>
 </div>
+
+<foxgis-dialog id="delete-dialog" class='modal' :dialog="dialogcontent" @dialog-action="deleteAction"></foxgis-dialog>
 </template>
 
 
 <script>
 import Cookies from 'js-cookie'
+import _ from 'lodash'
 import util from '../components/util.js'
 export default {
   methods: {
@@ -111,6 +124,104 @@ export default {
         iframe.src = url;
         iframe.style = "display:none";
         document.body.appendChild(iframe);
+      }
+    },
+
+    selectOne:function(upload_id){//单选
+      for(let i = 0;i<this.displayUploads.length;i++){
+        if(this.displayUploads[i].upload_id === upload_id){
+          if(this.displayUploads[i].checked==true){
+            this.displayUploads[i].checked=false;
+            $("[name='select-map']")[i].checked = false;
+          }else{
+            this.displayUploads[i].checked=true;
+            $("[name='select-map']")[i].checked = true;
+          }
+          break;
+        }
+        
+      }
+    },
+
+    selectAll:function(){//全选
+      for(let i = 0;i<this.displayUploads.length;i++){
+        this.displayUploads[i].checked=true;
+        $("[name='select-map']")[i].checked = true;
+      }
+    },
+
+    inverseSelect:function(){//反选
+      for(let i = 0;i<this.displayUploads.length;i++){
+        if(this.displayUploads[i].checked==true){
+          this.displayUploads[i].checked=false;
+          $("[name='select-map']")[i].checked = false;
+        }else{
+          this.displayUploads[i].checked=true;
+          $("[name='select-map']")[i].checked = true;
+        }
+      }
+    },
+
+    deleteAtlas:function(){
+      let t = 0;
+      let deleteIds = [];
+      for(var i = 0;i<this.displayUploads.length;i++){
+        if(this.displayUploads[i].checked === true){
+          deleteIds.push(this.displayUploads[i].upload_id);
+          t++;
+        }
+      }
+      if(t===0){
+        this.$broadcast("mailSent",{message:"未选择任何选项！",timeout:3000});
+      }else{
+        this.dialogcontent.title = "确定删除吗？";
+        document.getElementById('delete-dialog').style.display = 'block';
+        this.deleteUploadId = deleteIds;
+      }
+    },
+
+    deleteAction: function(status) {
+      if (status === 'ok') {
+        let length = this.displayUploads.length;
+        var username = Cookies.get('super-username');
+        var access_token = Cookies.get('super-access_token');
+        for(let i=0;i<this.deleteUploadId.length;i++){
+          let upload_id = this.deleteUploadId[i];
+          let url = SERVER_API.uploads + '/' + username + "?upload_id=" + upload_id;
+          this.$http({url:url,method:'DELETE',headers:{'x-access-token':access_token}})
+          .then(function(response){
+          if(response.ok){
+            for(let i = 0;i<this.uploads.length;i++){
+              if(this.uploads[i].upload_id === upload_id){
+                this.uploads.splice(i,1);
+              }
+            }
+          }
+          }, function(response) {
+            alert('未知错误，请稍后再试');
+          });
+        }
+        if(length === this.deleteUploadId.length){
+          for(let j = 0;j<this.owners.length;j++){
+            if(this.owners[j] === this.select_owner){
+              this.owners.splice(j,1);
+              break;
+            }
+          }
+          $("#delete_owner option[value='']").attr("selected",true);
+          this.select_owner = "";
+        }else{
+          $("#delete_owner option[value='"+this.select_owner+"']").attr("selected",true);
+        }
+        this.deleteUploadId = [];//重置deleteUploadId
+      }
+    },
+
+    selectOwner:function(){//选择上传者
+      this.select_owner = "";
+      let owner = $(".delete_owner select").val();
+      if(owner){
+        this.select_owner = owner;
       }
     }
   },
@@ -159,43 +270,73 @@ export default {
     }
     this.uploadYears = t;
 
-    let delete_url = SERVER_API.uploads + '?limit=180&sort=-updatedAt'
-    let that = this
-    //获取数据列表
+    let delete_url = SERVER_API.uploads + '?limit=99999&sort=-updatedAt&is_deleted=true';
+    let that = this;
+    //获取被删除的图集数据列表
     this.$http({ url: delete_url, method: 'GET', headers: { 'x-access-token': access_token } }).then(function(response) {
       if (response.data.length > 0) {
-        let data = response.data
+        let data = response.data;
         data = data.map(function(d) {
           if (d.size / 1024 > 1024) {
-            d.size = (d.size / 1048576).toFixed(2) + 'MB'
+            d.size = (d.size / 1048576).toFixed(2) + 'MB';
           } else {
-            d.size = (d.size / 1024).toFixed(2) + 'KB'
+            d.size = (d.size / 1024).toFixed(2) + 'KB';
           }
-          d.createdAt = util.dateFormat(new Date(d.createdAt))
-          d.updatedAt = util.dateFormat(new Date(d.updatedAt))
-          return d
+          d.createdAt = util.dateFormat(new Date(d.createdAt));
+          d.updatedAt = util.dateFormat(new Date(d.updatedAt));
+          return d;
         })
-        this.uploads = data
+        this.uploads = data;
         for(let i=0;i<this.uploads.length;i++){
+          this.owners.push(this.uploads[i].owner);
+          this.uploads[i].checked = false;//增加checked属性，标记卡片是否被选中
           if(!this.uploads[i].location){
-            this.uploads[i].location = "未指定"
+            this.uploads[i].location = "未指定";
           }
           if(!this.uploads[i].year){
-            this.uploads[i].year = "未指定"
+            this.uploads[i].year = "未指定";
           }
         }
+        this.owners = _.uniq(this.owners);
       }
     }, function(response) {
-      console.log(response)
+      this.$broadcast("mailSent",{message:"被删除的图集数据列表获取失败",timeout:3000});
     });
   },
+
+  computed: {
+    displayUploads: function(){
+      let temp = [];
+      let tempUploads = this.uploads;
+      for(let i=0;i<tempUploads.length;i++){
+        if(tempUploads[i].owner === this.select_owner){
+          temp.push(tempUploads[i]);
+        }
+      }
+      if(temp.length===0){
+        temp=this.uploads;
+      }
+      return temp;
+    }
+  },
+
   data() {
     return {
       userData:[],
       locations:[],
       years:[],
       uploadYears:[],
-      uploads:[]
+      uploads:[],
+      owners:[],
+      select_owner:"",
+      deleteUploadId:[],
+      dialogcontent: {
+        title: '',//对话框标题
+        tips:'',//对话框中的提示性文字
+        textCancel:'取消',
+        textOk:'删除'
+      },
+
     }
   },
 
@@ -273,5 +414,12 @@ h5 {
   white-space:nowrap;/* 不换行 */
   overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
   text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
+}
+#delete-dialog{
+  display: none;
+}
+.card-checkbox{
+    width: 15px;
+    height: 15px;
 }
 </style>
