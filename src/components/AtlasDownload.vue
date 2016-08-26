@@ -1,7 +1,7 @@
 <template>
 <div class="data">
   <mdl-snackbar display-on="mailSent"></mdl-snackbar>
-  <h5><i class="material-icons">layers</i><span>图集下载</span></h5>
+  <h5><i class="material-icons">file_download</i><span>图集下载</span></h5>
   <div id="atlas-download">
     <div class="map-location">
       <span>制图区域</span><br/>
@@ -35,7 +35,7 @@
     <span id="url-text" style="color:red;position:relative;top:10px;"></span>
   </div>
 
-  <h5><i class="material-icons">layers</i><span>图集清理</span></h5>
+  <h5><i class="material-icons">delete_forever</i><span>图集清理</span></h5>
   <div id="atlas-delete">
     <mdl-anchor-button accent raised v-mdl-ripple-effect style="min-width: 88px;" @click="downloadAtlas" id="btn-delete">删除</mdl-anchor-button>
     <div id="atlas-items">
