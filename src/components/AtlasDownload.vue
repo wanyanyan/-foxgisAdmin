@@ -41,16 +41,17 @@
 
   <h5><i class="material-icons">layers</i><span>图集清理</span></h5>
   <div id="atlas-delete">
-    <mdl-anchor-button accent raised v-mdl-ripple-effect style="min-width: 88px;" @click="deleteAtlas" id="btn-delete">删除</mdl-anchor-button>
-    <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 200px;position: absolute;" @click="selectAll" id="select-all">全选</mdl-anchor-button>
-    <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 100px;position: absolute;" @click="inverseSelect">反选</mdl-anchor-button>
-    <div style="width: 200px;margin-left: 300px;" class="delete_owner">
+    <mdl-anchor-button accent raised v-mdl-ripple-effect style="min-width: 88px;float: left;" @click="deleteAtlas" id="btn-delete">删除</mdl-anchor-button>
+    <div class="delete_owner">
       <span>上传者</span>
       <select id="delete_owner" @change="selectOwner">
         <option value="">选择上传者</option>
         <option value="{{u}}" v-for="u in owners">{{u}}</option>
       </select><span style="font-size:12px;"></span>
     </div>
+    <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 200px;position: absolute;" @click="selectAll" id="select-all">全选</mdl-anchor-button>
+    <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 100px;position: absolute;" @click="inverseSelect">反选</mdl-anchor-button>
+    
     <div id="atlas-items">
       <table>
         <tr>
@@ -75,7 +76,6 @@
           <td title="{{u.dimensions}}">{{u.dimensions}}</td>
           <td style= "cursor:pointer;width: 30px;">
             <input type="checkbox" name="select-map" value="{{u.upload_id}}" @click="selectOne(u.upload_id)" style="width:15px;height:15px;">
-            <!--<input type="checkbox" class="card-checkbox" style>-->
           </td>
         </tr>
       </table>
@@ -390,6 +390,7 @@ h5 {
   margin-bottom: 100px;
   overflow: auto;
   max-height: 600px;
+  float: left;
 }
 #atlas-items table {
   width: calc(100% - 5px);
@@ -418,8 +419,11 @@ h5 {
 #delete-dialog{
   display: none;
 }
-.card-checkbox{
-    width: 15px;
-    height: 15px;
+.delete_owner{
+  text-align: center;
+  width: 200px;
+  float: left;
+  position: relative;
+  top: 7px;
 }
 </style>
