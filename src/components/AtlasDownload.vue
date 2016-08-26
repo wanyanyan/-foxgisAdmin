@@ -21,7 +21,7 @@
       <span>上传单位</span><br/>
       <select>
         <option value="">选择上传单位</option>
-        <option value="{{user.username}},{{user.organization}}" v-for="user in userData">{{user.organization}}</option>
+        <option value="{{user.username}},{{user.organization}}" v-for="user in userData">{{user.organization}}({{user.username}})</option>
       </select><span style="font-size:12px;color:red;">(且)</span>
     </div>
     <div class="upload-year">
@@ -32,7 +32,6 @@
       </select>
     </div>
     <mdl-anchor-button accent raised v-mdl-ripple-effect style="width:6%;min-width:20px;" @click="downloadAtlas" id="btn-download">下载</mdl-anchor-button>
-    <span id="url-text" style="color:red;position:relative;top:10px;"></span>
   </div>
 
   <h5><i class="material-icons">delete_forever</i><span>图集清理</span></h5>
@@ -98,7 +97,7 @@ export default {
       var organization =  $(".user-orga select").val();
       var upload =  $(".upload-year select").val();
       if(mapLocation===""&&mapYear===""&&organization===""&&upload===""){
-        $("#url-text").text("请选择参数");
+        this.$broadcast("mailSent",{message:"请选择参数！",timeout:3000});
         return;
       }
       if(mapLocation){url = url+"&location="+mapLocation;}
@@ -170,7 +169,7 @@ export default {
       if(t===0){
         this.$broadcast("mailSent",{message:"未选择任何选项！",timeout:3000});
       }else{
-        this.dialogcontent.title = "确定删除吗？";
+        this.dialogcontent.title = "该操作将会从数据库彻底删除！确定删除吗？";
         document.getElementById('delete-dialog').style.display = 'block';
         this.deleteUploadId = deleteIds;
       }
