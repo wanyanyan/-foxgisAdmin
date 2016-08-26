@@ -39,12 +39,45 @@
     </div>
   </div>
 
+  <h5><i class="material-icons">layers</i><span>图集清理</span></h5>
+  <div id="atlas-delete">
+    <mdl-anchor-button accent raised v-mdl-ripple-effect style="min-width: 88px;" @click="downloadAtlas" id="btn-delete">删除</mdl-anchor-button>
+    <div id="atlas-items">
+      <table>
+        <tr>
+          <th style="width:16%;">图名</th>
+          <th style="width:8%;">上传者</th>
+          <th style="width:10%;">上传时间</th>
+          <th style="width:10%;">删除时间</th>
+          <th style="width:7%;">制图区域</th>
+          <th style="width:6%;">制图年份</th>
+          <th style="width:3%;">格式</th>
+          <th style="width:7%;">图幅大小</th>
+          <th style="width:3%;text-align:center;">选择</th>
+        </tr>
+        <tr v-for="u in uploads">
+          <td title="{{u.name}}">{{u.name}}</td>
+          <td title="{{u.owner}}">{{u.owner}}</td>
+          <td title="{{u.createdAt}}">{{u.createdAt}}</td>
+          <td title="{{u.updatedAt}}">{{u.updatedAt}}</td>
+          <td title="{{u.location}}">{{u.location}}</td>
+          <td title="{{u.year}}">{{u.year}}</td>
+          <td title="{{u.format}}">{{u.format}}</td>
+          <td title="{{u.dimensions}}">{{u.dimensions}}</td>
+          <td style= "cursor:pointer;width: 30px;">
+            <input type="checkbox" name="select-map" style="width:15px;height:15px;">
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
 </div>
 </template>
 
 
 <script>
 import Cookies from 'js-cookie'
+import util from '../components/util.js'
 export default {
   methods: {
     downloadAtlas:function(){
@@ -125,13 +158,44 @@ export default {
       t.push(currYear-i);
     }
     this.uploadYears = t;
+
+    let delete_url = SERVER_API.uploads + '?limit=180&sort=-updatedAt'
+    let that = this
+    //获取数据列表
+    this.$http({ url: delete_url, method: 'GET', headers: { 'x-access-token': access_token } }).then(function(response) {
+      if (response.data.length > 0) {
+        let data = response.data
+        data = data.map(function(d) {
+          if (d.size / 1024 > 1024) {
+            d.size = (d.size / 1048576).toFixed(2) + 'MB'
+          } else {
+            d.size = (d.size / 1024).toFixed(2) + 'KB'
+          }
+          d.createdAt = util.dateFormat(new Date(d.createdAt))
+          d.updatedAt = util.dateFormat(new Date(d.updatedAt))
+          return d
+        })
+        this.uploads = data
+        for(let i=0;i<this.uploads.length;i++){
+          if(!this.uploads[i].location){
+            this.uploads[i].location = "未指定"
+          }
+          if(!this.uploads[i].year){
+            this.uploads[i].year = "未指定"
+          }
+        }
+      }
+    }, function(response) {
+      console.log(response)
+    });
   },
   data() {
     return {
       userData:[],
       locations:[],
       years:[],
-      uploadYears:[]
+      uploadYears:[],
+      uploads:[]
     }
   },
 
@@ -178,5 +242,36 @@ h5 {
 
 #atlas-download select{
   width: 150px;
+}
+
+#atlas-items {
+  margin-top:10px; 
+  margin-bottom: 100px;
+  overflow: auto;
+  max-height: 600px;
+}
+#atlas-items table {
+  width: calc(100% - 5px);
+  font-family: verdana,arial,sans-serif;
+  font-size:11px;
+  color:#333333;
+  border-width: 1px;
+  border-color: #666666;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+#atlas-items table th {
+  border: 1px solid #666666;
+  padding: 5px 1px 5px 1px;
+  background-color: #dedede;
+}
+#atlas-items table td {
+  border: 1px solid #666666;
+  padding: 5px 2px 5px 2px;
+  background-color: #ffffff;
+  word-break:keep-all;/* 不换行 */
+  white-space:nowrap;/* 不换行 */
+  overflow:hidden;/* 内容超出宽度时隐藏超出部分的内容 */
+  text-overflow:ellipsis;/* 当对象内文本溢出时显示省略标记(...) ；需与overflow:hidden;一起使用。*/
 }
 </style>
