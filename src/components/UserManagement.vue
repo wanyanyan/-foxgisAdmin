@@ -508,7 +508,7 @@ export default {
   overflow: hidden;
 }
 .wrapper table {
-  width: 100%;
+  width: 99%;
   font-family: verdana,arial,sans-serif;
   font-size:11px;
   color:#333333;
