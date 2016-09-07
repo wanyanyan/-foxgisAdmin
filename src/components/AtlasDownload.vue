@@ -1,7 +1,11 @@
 <template>
 <div class="data">
   <mdl-snackbar display-on="mailSent"></mdl-snackbar>
-  <h5><i class="material-icons">file_download</i><span>图集下载</span></h5>
+  <h5>
+    <i class="material-icons">file_download</i>
+    <span>图集下载</span>
+    <a @click="downloadInfo">导出图集信息到excel</a>
+  </h5>
   <div id="atlas-download">
     <div class="map-location">
       <span>制图区域</span><br/>
@@ -88,14 +92,20 @@ import _ from 'lodash'
 import util from '../components/util.js'
 export default {
   methods: {
-    downloadAtlas:function(){
+    downloadInfo:function(){//导出图集详细信息到excel
+      let access_token = Cookies.get('super-access_token');
+      let url = SERVER_API.uploads + "/excel?access_token=" + access_token;
+      this.downloadAction(url);
+    },
+
+    downloadAtlas:function(){//图集下载
       let username = Cookies.get('super-username');
       let access_token = Cookies.get('super-access_token');
       let url = SERVER_API.uploads+"/"+username+"/"+"download?";
-      var mapLocation = $(".map-location select").val();
-      var mapYear = $(".map-year select").val();
-      var organization =  $(".user-orga select").val();
-      var upload =  $(".upload-year select").val();
+      let mapLocation = $(".map-location select").val();
+      let mapYear = $(".map-year select").val();
+      let organization =  $(".user-orga select").val();
+      let upload =  $(".upload-year select").val();
       if(mapLocation===""&&mapYear===""&&organization===""&&upload===""){
         this.$broadcast("mailSent",{message:"请选择参数！",timeout:3000});
         return;
@@ -106,16 +116,20 @@ export default {
       if(upload){url = url+"&createdAt="+upload;}
       url = url.replace("&","");
       url = url + "&access_token=" + access_token;
+      this.downloadAction(url);
+    },
+
+    downloadAction:function(url){//下载方法
       if((/Trident\/7\./).test(navigator.userAgent)||(/Trident\/6\./).test(navigator.userAgent)){
       //IE10/IE11
-        var aLink = document.createElement('a')
-        aLink.className = 'download_link'
-        var text = document.createTextNode('&nbsp;')
-        aLink.appendChild(text)
-        aLink.href = url
+        let aLink = document.createElement('a');
+        aLink.className = 'download_link';
+        let text = document.createTextNode('&nbsp;');
+        aLink.appendChild(text);
+        aLink.href = url;
         aLink.click()
       }else{//Chrome,Firefox
-        var iframe = document.createElement("iframe");
+        let iframe = document.createElement("iframe");
         iframe.src = url;
         iframe.style = "display:none";
         document.body.appendChild(iframe);
@@ -193,7 +207,7 @@ export default {
             }
           }
           }, function(response) {
-            alert('未知错误，请稍后再试');
+            this.$broadcast('mailSent', { message: '删除失败！',timeout:3000 });
           });
         }
         if(length === this.deleteUploadId.length){
@@ -222,14 +236,15 @@ export default {
   },
 
   attached() {
-    let username = Cookies.get('super-username')
+    let username = Cookies.get('super-username');
     if(username === undefined){
-      window.location.herf = "#!/loginManagement" 
+      window.location.herf = "#!/loginManagement";
     }
-    let access_token = Cookies.get('super-access_token')
+    let access_token = Cookies.get('super-access_token');
     let url = SERVER_API.users;
       //获取数据列表
-    this.$http({ url: url, method: 'GET', headers: { 'x-access-token': access_token } }).then(function(response) {
+    this.$http({ url: url, method: 'GET', headers: { 'x-access-token': access_token } })
+    .then(function(response) {
       let data = response.data;
       this.userData=data;
     }, function(response) {
@@ -238,9 +253,10 @@ export default {
 
     //获取制图区域统计信息
     var locationUrl = SERVER_API.stats+"/location";
-    this.$http({ url: locationUrl, method: 'GET', headers: { 'x-access-token': access_token } }).then(function(response) {
+    this.$http({ url: locationUrl, method: 'GET', headers: { 'x-access-token': access_token } })
+    .then(function(response) {
       if (response.data.length > 0) {
-        let data = response.data
+        let data = response.data;
         this.locations = data;
       }
     },function(response){
@@ -249,9 +265,10 @@ export default {
 
     //获取制图年份统计信息
     var yearUrl = SERVER_API.stats+"/year";
-    this.$http({ url: yearUrl, method: 'GET', headers: { 'x-access-token': access_token } }).then(function(response) {
+    this.$http({ url: yearUrl, method: 'GET', headers: { 'x-access-token': access_token } })
+    .then(function(response) {
       if (response.data.length > 0) {
-        let data = response.data
+        let data = response.data;
         this.years = data;
       }
     },function(response){
@@ -268,7 +285,8 @@ export default {
     let delete_url = SERVER_API.uploads + '?limit=99999&sort=-updatedAt&is_deleted=true';
     let that = this;
     //获取被删除的图集数据列表
-    this.$http({ url: delete_url, method: 'GET', headers: { 'x-access-token': access_token } }).then(function(response) {
+    this.$http({ url: delete_url, method: 'GET', headers: { 'x-access-token': access_token } })
+    .then(function(response) {
       if (response.data.length > 0) {
         let data = response.data;
         data = data.map(function(d) {
@@ -359,6 +377,16 @@ export default {
 
 h5 {
   margin-top: 40px;
+}
+
+h5 a {
+  cursor:pointer;
+  font-size: 12px;
+  color: #3f51b5;
+}
+
+h5 a:hover {
+  text-decoration:underline;
 }
 
 .material-icons {
