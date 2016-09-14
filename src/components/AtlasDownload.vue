@@ -12,21 +12,24 @@
       <select>
         <option value="">选择制图区域</option>
         <option value="{{location.location}}" v-for="location in locations">{{location.location}}</option>
-      </select><span style="font-size:12px;color:red;">(且)</span>
+      </select>
+      <span style="font-size:12px;color:red;">(且)</span>
     </div>
     <div class="map-year">
       <span>制图时间</span><br/>
       <select>
         <option value="">选择制图时间</option>
         <option value="{{year.year}}" v-for="year in years">{{year.year}}</option>
-      </select><span style="font-size:12px;color:red;">(且)</span>
+      </select>
+      <span style="font-size:12px;color:red;">(且)</span>
     </div>
     <div class="user-orga">
       <span>上传单位</span><br/>
       <select>
         <option value="">选择上传单位</option>
         <option value="{{user.username}},{{user.organization}}" v-for="user in userData">{{user.organization}}({{user.username}})</option>
-      </select><span style="font-size:12px;color:red;">(且)</span>
+      </select>
+      <span style="font-size:12px;color:red;">(且)</span>
     </div>
     <div class="upload-year">
       <span>上传时间</span><br/>
@@ -46,7 +49,8 @@
       <select id="delete_owner" @change="selectOwner">
         <option value="">选择上传者</option>
         <option value="{{u}}" v-for="u in owners">{{u}}</option>
-      </select><span style="font-size:12px;"></span>
+      </select>
+      <span style="font-size:12px;"></span>
     </div>
     <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 200px;position: absolute;" @click="selectAll" id="select-all">全选</mdl-anchor-button>
     <mdl-anchor-button primary raised v-mdl-ripple-effect style="right: 100px;position: absolute;" @click="inverseSelect">反选</mdl-anchor-button>

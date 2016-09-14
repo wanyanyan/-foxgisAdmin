@@ -407,14 +407,15 @@ export default {
     },
   },
   attached() {
-    let username = Cookies.get('super-username')
+    let username = Cookies.get('super-username');
     if(username === undefined){
-      return 
+      return ;
     }
-    let access_token = Cookies.get('super-access_token')
+    let access_token = Cookies.get('super-access_token');
     let url = SERVER_API.users;
       //获取数据列表
-    this.$http({ url: url, method: 'GET', headers: { 'x-access-token': access_token } }).then(function(response) {
+    this.$http({ url: url, method: 'GET', headers: { 'x-access-token': access_token } })
+    .then(function(response) {
       let data = response.data;
       for(let i=0;i<data.length;i++){
         if(data[i].is_verified === false){
